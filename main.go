@@ -19,8 +19,23 @@ func main() {
 
 	api := NewAPI()
 
+	http.HandleFunc("/health", healthCheck)
 	http.HandleFunc("/cache", api.Handler)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", os.Getenv("PORT")), nil))
+}
+
+func healthCheck(w http.ResponseWriter, r *http.Request) {
+	resp := HealthCheck{
+		Status: "OK",
+		Date:   time.Now(),
+	}
+
+	err := json.NewEncoder(w).Encode(resp)
+	if err != nil {
+		fmt.Printf("error encoding response: %v\n", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 }
 
 func (a *API) Handler(w http.ResponseWriter, r *http.Request) {
@@ -32,7 +47,7 @@ func (a *API) Handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Printf("send a request for %s:", q)
+	fmt.Printf("send a request for: %s\n", q)
 
 	resp := APIResponse{
 		Cache: cached,
@@ -48,7 +63,6 @@ func (a *API) Handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *API) getData(ctx context.Context, q string) ([]NominatimResponse, bool, error) {
-	// is query cached?
 	val, err := a.cache.Get(ctx, q).Result()
 	if err == redis.Nil {
 		escapedQ := url.PathEscape(q)
@@ -102,8 +116,8 @@ func NewAPI() *API {
 
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     redisAddress,
-		Password: "", // no password set
-		DB:       0,  // use default DB
+		Password: "",
+		DB:       0,
 	})
 
 	return &API{

@@ -1,5 +1,12 @@
 package main
 
+import "time"
+
+type HealthCheck struct {
+	Status string    `json:"status"`
+	Date   time.Time `json:"time"`
+}
+
 type APIResponse struct {
 	Cache bool                `json:"cache"`
 	Data  []NominatimResponse `json:"data"`
