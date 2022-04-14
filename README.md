@@ -23,5 +23,5 @@ localhost:8080/health
 
 ### Search with Cache
 ```
-localhost:8080/cache?q=your_query
+localhost:8080/cache?q=istanbul
 ```
