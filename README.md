@@ -8,14 +8,20 @@ A simple Go caching app with Redis and Docker. Using the free search api of Nomi
 docker compose up --build
 ```
 
-#### Health Check
+##### or
+
+```
+go run .
+```
+
+### Health Check
 
 ```
 localhost:8080/health
 ```
 
 
-#### Search with Cache
+### Search with Cache
 ```
 localhost:8080/cache?q=your_query
 ```
