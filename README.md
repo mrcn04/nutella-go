@@ -1,6 +1,6 @@
 # nutella-go
 
-A simple Go caching app with Redis and Docker. Using the free search api of Nominatim.
+A simple Go app to cache search results from the free Nominatim API using Redis and Docker.
 
 ### Run
 
